@@ -2,6 +2,7 @@ package com.example.isftdad.ui.screen.mail
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -82,7 +83,8 @@ fun EmailAttachment(
                 bottom.linkTo(parent.bottom)
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
-            }
+            },
+            onAttachmentClicked = onAttachmentClicked
         )
 
         IconButton(
@@ -105,6 +107,7 @@ fun EmailAttachment(
 @Composable
 fun AttachmentSurface(
     modifier: Modifier,
+    onAttachmentClicked: () -> Unit,
     elevation: Dp = 4.dp,
     shape: Shape = RoundedCornerShape(4.dp)
 ) {
@@ -114,6 +117,7 @@ fun AttachmentSurface(
         modifier = modifier.defaultMinSize(150.dp, 120.dp)
             .padding(end = 20.dp)
             .background(color = MaterialTheme.colors.surface, shape)
+            .clickable { onAttachmentClicked.invoke() }
             /*.shadow(elevation = elevation, shape = shape, clip = false)
             .zIndex(elevation.value)
             .padding(end = 20.dp)

@@ -27,6 +27,12 @@ class SendEmailViewModel @Inject constructor(
             Action.Send -> {
                 sendUiEvent(UiEvent.Toast("send"))
             }
+            is Action.OnAttachmentClick -> {
+                sendUiEvent(UiEvent.Toast("attach click ${action.index}"))
+            }
+            is Action.RemoveAttachment -> {
+                sendUiEvent(UiEvent.Toast("remove attach ${action.index}"))
+            }
         }
     }
 
