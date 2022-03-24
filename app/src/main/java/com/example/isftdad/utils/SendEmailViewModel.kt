@@ -18,13 +18,28 @@ class SendEmailViewModel @Inject constructor(
 
     override fun collectAction(action: Action) {
         when (action) {
-
+            Action.AddAttachment -> {
+                sendUiEvent(UiEvent.Toast("add"))
+            }
+            Action.Cancel -> {
+                sendUiEvent(UiEvent.Toast("cancel"))
+            }
+            Action.Send -> {
+                sendUiEvent(UiEvent.Toast("send"))
+            }
         }
     }
 
+    fun send() {
+        sendAction(Action.Send)
+    }
+
     fun addAttachment() {
-        //sendUiEvent()
-        //uiState.value =
+        sendAction(Action.AddAttachment)
+    }
+
+    fun onCancelClicked() {
+        sendAction(Action.Cancel)
     }
 
     override fun getUiState(): StateFlow<UiState> = uiState.asStateFlow()

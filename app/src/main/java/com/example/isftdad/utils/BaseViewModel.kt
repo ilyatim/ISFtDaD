@@ -39,13 +39,18 @@ abstract class BaseViewModel<Action, UiState, UiEvent> (
     }
 
     private suspend fun launchChannel() {
-        actionChannel.consumeAsFlow().collect(this::sendAction)
+        actionChannel.consumeAsFlow().collect(this::collectAction)
     }
 
     override fun sendAction(action: Action) {
         launch {
             actionChannel.send(action)
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        this.cancel()
     }
 }
 
