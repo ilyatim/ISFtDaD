@@ -8,6 +8,7 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,7 +20,34 @@ import androidx.compose.ui.graphics.compositeOver
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintLayoutScope
 import kotlin.math.ln
+
+@Composable
+fun ConstraintBox(
+    modifier: Modifier = Modifier,
+    shape: Shape = RectangleShape,
+    color: Color = MaterialTheme.colors.surface,
+    border: BorderStroke? = null,
+    elevation: Dp = 4.dp,
+    content: @Composable ConstraintLayoutScope.() -> Unit
+) {
+    ConstraintLayout(
+        modifier = modifier
+            .shadow(elevation = elevation, shape = shape, clip = false)
+            .zIndex(elevation.value)
+            .then(if (border != null) Modifier.border(border, shape) else Modifier)
+            .background(
+                color = color.withElevation(elevation),
+                shape = shape
+            )
+            .clip(shape)
+    ) {
+        this.content()
+    }
+}
+
 
 @Composable
 fun SurfaceBox(

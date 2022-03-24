@@ -1,10 +1,10 @@
 package com.example.isftdad.utils
 
 import com.example.isftdad.data.model.sendEmail.Action
+import com.example.isftdad.data.model.sendEmail.Attachment
 import com.example.isftdad.data.model.sendEmail.UiEvent
 import com.example.isftdad.data.model.sendEmail.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -40,6 +40,18 @@ class SendEmailViewModel @Inject constructor(
 
     fun onCancelClicked() {
         sendAction(Action.Cancel)
+    }
+
+    fun getAttachmentList(): List<Attachment> {
+        return List(5) { Attachment("") }//(getUiState().value as? UiState.Content)?.attachments ?: listOf()
+    }
+
+    fun removeAttachment(index: Int) {
+        sendAction(Action.RemoveAttachment(index))
+    }
+
+    fun onAttachmentClicked(index: Int) {
+        sendAction(Action.OnAttachmentClick(index))
     }
 
     override fun getUiState(): StateFlow<UiState> = uiState.asStateFlow()

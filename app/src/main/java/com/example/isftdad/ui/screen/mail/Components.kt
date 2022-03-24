@@ -1,21 +1,39 @@
 package com.example.isftdad.ui.screen.mail
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Call
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
+import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.isftdad.R
-import com.example.isftdad.ui.theme.gray_808080
+import com.example.isftdad.data.model.sendEmail.Attachment
+import com.example.isftdad.ui.figure.ConstraintBox
+import com.example.isftdad.ui.figure.SurfaceBox
+import com.example.isftdad.ui.theme.dividerOnBackground
 import com.example.isftdad.utils.SendEmailViewModel
 
 
@@ -30,7 +48,84 @@ fun MailTextInput(
 fun AttachmentList(
     viewModel: SendEmailViewModel
 ) {
+    val list = remember {
+        viewModel.getAttachmentList()
+    }
 
+    LazyRow(
+        contentPadding = PaddingValues(start = 16.dp, top = 30.dp, bottom = 16.dp)
+    ) {
+        itemsIndexed(list) { index, item ->
+            val onAttachmentClicked = {
+                viewModel.onAttachmentClicked(index)
+            }
+            val onClearClicked = {
+                viewModel.removeAttachment(index)
+            }
+            EmailAttachment(item, onAttachmentClicked, onClearClicked)
+        }
+    }
+}
+
+@Composable
+fun EmailAttachment(
+    item: Attachment,
+    onAttachmentClicked: () -> Unit,
+    onClearClicked: () -> Unit
+) {
+    ConstraintLayout{
+        val (clearButton, image) = createRefs()
+
+        AttachmentSurface(
+            modifier = Modifier.constrainAs(image) {
+                top.linkTo(parent.top, margin = 5.dp)
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+            }
+        )
+
+        IconButton(
+            onClick = onClearClicked,
+            modifier = Modifier.constrainAs(clearButton) {
+                top.linkTo(parent.top)
+                end.linkTo(parent.end, margin = 10.dp)
+            }.background(MaterialTheme.colors.error, RoundedCornerShape(20.dp))
+                .size(34.dp)
+        ) {
+            Icon(
+                imageVector = Icons.Filled.Clear,
+                contentDescription = stringResource(id = R.string.cancel_button),
+                tint = MaterialTheme.colors.onError
+            )
+        }
+    }
+}
+
+@Composable
+fun AttachmentSurface(
+    modifier: Modifier,
+    elevation: Dp = 4.dp,
+    shape: Shape = RoundedCornerShape(4.dp)
+) {
+    Image(
+        painter = rememberVectorPainter(image = Icons.Filled.Call),
+        contentDescription = stringResource(id = R.string.attachment),
+        modifier = modifier.defaultMinSize(150.dp, 120.dp)
+            .padding(end = 20.dp)
+            .background(color = MaterialTheme.colors.surface, shape)
+            /*.shadow(elevation = elevation, shape = shape, clip = false)
+            .zIndex(elevation.value)
+            .padding(end = 20.dp)
+            .background(
+                color = MaterialTheme.colors.surface,
+                shape = shape
+            )
+            .clip(shape)*/
+        ,
+        colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
+        contentScale = ContentScale.Inside
+    )
 }
 
 @Composable
@@ -95,6 +190,6 @@ private fun BaseTextInput(
                 cursorBrush = SolidColor(MaterialTheme.colors.onBackground),
             )
         }
-        Divider(color = gray_808080)
+        Divider(color = MaterialTheme.colors.dividerOnBackground)
     }
 }

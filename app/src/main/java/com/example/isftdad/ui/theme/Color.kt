@@ -19,3 +19,7 @@ val Colors.fabBackground: Color
 @get:Composable
 val Colors.fabOnBackground: Color
     get() = if (isLight) Color.White else dark_onSurface
+
+@get:Composable
+val Colors.dividerOnBackground: Color
+    get() = if (isLight) gray_808080_30 else gray_808080

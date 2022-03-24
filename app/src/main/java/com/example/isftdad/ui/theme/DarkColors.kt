@@ -7,3 +7,5 @@ val dark_background = Color(0xFF0B192F)
 val dark_surface = Color(0xFF162B46)
 val dark_onBackground = Color.White
 val dark_onSurface = blue_accent_66A4ED
+val dark_error = Color(0xFFC10000)
+val dark_onError = gray_c9c9c9

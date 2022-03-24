@@ -2,4 +2,6 @@
     <string name="app_name">ISFtDaD</string>
     <string name="recipient_text_input_title">To</string>
     <string name="subject_text_input_title">Subject</string>
+    <string name="attachment">attachment</string>
+    <string name="cancel_button">Cancel</string>
 </resources>
