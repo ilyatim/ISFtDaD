@@ -1,20 +1,31 @@
 package com.example.isftdad.ui.screen
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInputModeManager
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.isftdad.R
 import com.example.isftdad.data.model.sendEmail.UiEvent
 import com.example.isftdad.ui.SubscribeOnEvents
 import com.example.isftdad.ui.icon.CancelIcon
-import com.example.isftdad.ui.theme.*
+import com.example.isftdad.ui.screen.mail.AttachmentList
+import com.example.isftdad.ui.screen.mail.MailTextInput
+import com.example.isftdad.ui.screen.mail.RecipientTextInput
+import com.example.isftdad.ui.screen.mail.SubjectTextInput
+import com.example.isftdad.ui.theme.fabBackground
+import com.example.isftdad.ui.theme.fabOnBackground
 import com.example.isftdad.utils.SendEmailViewModel
 import com.example.isftdad.utils.extensions.makeShortToast
 
@@ -40,9 +51,15 @@ fun SendEmail(
             SendEmailTopBar(viewModel = viewModel)
         }
     ) {
-
+        Column {
+            RecipientTextInput(viewModel)
+            SubjectTextInput(viewModel)
+            AttachmentList(viewModel)
+            MailTextInput(viewModel)
+        }
     }
 }
+
 
 @Composable
 fun SendEmailFloatingActionButton(

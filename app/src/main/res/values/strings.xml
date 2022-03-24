@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ISFtDaD</string>
+    <string name="recipient_text_input_title">To</string>
+    <string name="subject_text_input_title">Subject</string>
 </resources>
