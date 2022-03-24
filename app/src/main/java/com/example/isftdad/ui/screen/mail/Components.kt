@@ -17,15 +17,15 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
@@ -42,7 +42,45 @@ import com.example.isftdad.utils.SendEmailViewModel
 fun MailTextInput(
     viewModel: SendEmailViewModel
 ) {
+    val inputText = remember {
+        mutableStateOf("")
+    }
 
+    HintTextField(
+        value = inputText.value,
+        onValueChange = {
+            inputText.value = it
+        },
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colors.background)
+            .padding(16.dp),
+        textStyle = LocalTextStyle.current.copy(color = MaterialTheme.colors.onBackground),
+    ) {
+        Text(text = stringResource(id = R.string.email_hint))
+    }
+}
+
+@Composable
+fun HintTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier,
+    textStyle: TextStyle = LocalTextStyle.current,
+    cursorBrush: Brush = SolidColor(MaterialTheme.colors.onBackground),
+    placeholder: @Composable (() -> Unit)? = null
+) {
+    Box(modifier = modifier) {
+        BasicTextField(
+            value = value,
+            onValueChange = { onValueChange(it) },
+            textStyle = textStyle,
+            cursorBrush = cursorBrush,
+        )
+        if (value.isEmpty()) {
+            placeholder?.invoke()
+        }
+    }
 }
 
 @Composable
@@ -76,7 +114,7 @@ fun EmailAttachment(
 ) {
     ConstraintLayout{
         val (clearButton, image) = createRefs()
-
+        val elevation: Dp = 4.dp
         AttachmentSurface(
             modifier = Modifier.constrainAs(image) {
                 top.linkTo(parent.top, margin = 5.dp)
@@ -84,16 +122,23 @@ fun EmailAttachment(
                 start.linkTo(parent.start)
                 end.linkTo(parent.end)
             },
-            onAttachmentClicked = onAttachmentClicked
+            onAttachmentClicked = onAttachmentClicked,
+            elevation = elevation
         )
 
         IconButton(
             onClick = onClearClicked,
-            modifier = Modifier.constrainAs(clearButton) {
-                top.linkTo(parent.top)
-                end.linkTo(parent.end, margin = 10.dp)
-            }.background(MaterialTheme.colors.error, RoundedCornerShape(20.dp))
+            modifier = Modifier
+                .constrainAs(clearButton) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end, margin = 10.dp)
+                }
+                .background(
+                    MaterialTheme.colors.error,
+                    RoundedCornerShape(20.dp)
+                )
                 .size(34.dp)
+                .zIndex(elevation.value)
         ) {
             Icon(
                 imageVector = Icons.Filled.Clear,
@@ -114,18 +159,19 @@ fun AttachmentSurface(
     Image(
         painter = rememberVectorPainter(image = Icons.Filled.Call),
         contentDescription = stringResource(id = R.string.attachment),
-        modifier = modifier.defaultMinSize(150.dp, 120.dp)
+        modifier = modifier
+            .defaultMinSize(150.dp, 120.dp)
             .padding(end = 20.dp)
-            .background(color = MaterialTheme.colors.surface, shape)
-            .clickable { onAttachmentClicked.invoke() }
-            /*.shadow(elevation = elevation, shape = shape, clip = false)
-            .zIndex(elevation.value)
-            .padding(end = 20.dp)
+            .shadow(elevation = elevation, shape = shape, clip = false)
+            .clip(shape)
             .background(
                 color = MaterialTheme.colors.surface,
                 shape = shape
             )
-            .clip(shape)*/
+            .zIndex(elevation.value)
+            //.background(color = MaterialTheme.colors.surface, shape)
+            .clickable { onAttachmentClicked.invoke() }
+
         ,
         colorFilter = ColorFilter.tint(MaterialTheme.colors.onSurface),
         contentScale = ContentScale.Inside
