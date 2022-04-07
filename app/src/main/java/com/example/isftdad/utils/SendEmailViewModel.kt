@@ -1,7 +1,7 @@
 package com.example.isftdad.utils
 
 import com.example.isftdad.data.model.sendEmail.Action
-import com.example.isftdad.data.model.sendEmail.Attachment
+import com.example.isftdad.data.model.attachment.Attachment
 import com.example.isftdad.data.model.sendEmail.UiEvent
 import com.example.isftdad.data.model.sendEmail.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +19,7 @@ class SendEmailViewModel @Inject constructor(
     override fun collectAction(action: Action) {
         when (action) {
             Action.AddAttachment -> {
-                sendUiEvent(UiEvent.Toast("add"))
+                sendUiEvent(UiEvent.BottomSheet)
             }
             Action.Cancel -> {
                 sendUiEvent(UiEvent.Toast("cancel"))
@@ -49,7 +49,7 @@ class SendEmailViewModel @Inject constructor(
     }
 
     fun getAttachmentList(): List<Attachment> {
-        return List(5) { Attachment("") }//(getUiState().value as? UiState.Content)?.attachments ?: listOf()
+        return List(5) { Attachment.Image("") }//(getUiState().value as? UiState.Content)?.attachments ?: listOf()
     }
 
     fun removeAttachment(index: Int) {

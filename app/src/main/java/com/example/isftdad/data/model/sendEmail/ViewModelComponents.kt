@@ -1,5 +1,7 @@
 package com.example.isftdad.data.model.sendEmail
 
+import com.example.isftdad.data.model.attachment.Attachment
+
 sealed class UiState {
     object Idle : UiState()
 
@@ -21,4 +23,6 @@ sealed class Action {
 
 sealed class UiEvent {
     data class Toast(val string: String) : UiEvent()
+
+    object BottomSheet : UiEvent()
 }

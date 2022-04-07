@@ -1,25 +1,20 @@
 package com.example.isftdad.ui.screen
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.isftdad.R
 import com.example.isftdad.data.model.sendEmail.UiEvent
+import com.example.isftdad.ui.ShowMediaBottomSheet
 import com.example.isftdad.ui.SubscribeOnEvents
-import com.example.isftdad.ui.icon.CancelIcon
+import com.example.isftdad.ui.basic.icon.CancelIcon
 import com.example.isftdad.ui.screen.mail.AttachmentList
 import com.example.isftdad.ui.screen.mail.MailTextInput
 import com.example.isftdad.ui.screen.mail.RecipientTextInput
@@ -35,10 +30,14 @@ fun SendEmail(
 ) {
     val scaffoldState = rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
     val context = LocalContext.current
+    val shouldShowBottomSheet = rememberSaveable {
+        mutableStateOf(false)
+    }
 
     SubscribeOnEvents(viewModel = viewModel) { event ->
         when (event) {
             is UiEvent.Toast -> context.makeShortToast(event.string)
+            UiEvent.BottomSheet -> shouldShowBottomSheet.value = true
         }
     }
 
@@ -57,6 +56,12 @@ fun SendEmail(
             AttachmentList(viewModel)
             MailTextInput(viewModel)
         }
+    }
+
+    if (shouldShowBottomSheet.value) {
+        ShowMediaBottomSheet(
+            onSheetClosed = { shouldShowBottomSheet.value = false }
+        )
     }
 }
 

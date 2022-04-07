@@ -5,7 +5,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -17,13 +16,11 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -31,9 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.example.isftdad.R
-import com.example.isftdad.data.model.sendEmail.Attachment
-import com.example.isftdad.ui.figure.ConstraintBox
-import com.example.isftdad.ui.figure.SurfaceBox
+import com.example.isftdad.data.model.attachment.Attachment
 import com.example.isftdad.ui.theme.dividerOnBackground
 import com.example.isftdad.utils.SendEmailViewModel
 
@@ -137,7 +132,7 @@ fun EmailAttachment(
                     MaterialTheme.colors.error,
                     RoundedCornerShape(20.dp)
                 )
-                .size(34.dp)
+                .size(30.dp)
                 .zIndex(elevation.value)
         ) {
             Icon(
@@ -151,7 +146,7 @@ fun EmailAttachment(
 
 @Composable
 fun AttachmentSurface(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     onAttachmentClicked: () -> Unit,
     elevation: Dp = 4.dp,
     shape: Shape = RoundedCornerShape(4.dp)
@@ -160,7 +155,7 @@ fun AttachmentSurface(
         painter = rememberVectorPainter(image = Icons.Filled.Call),
         contentDescription = stringResource(id = R.string.attachment),
         modifier = modifier
-            .defaultMinSize(150.dp, 120.dp)
+            .defaultMinSize(150.dp, 90.dp)
             .padding(end = 20.dp)
             .shadow(elevation = elevation, shape = shape, clip = false)
             .clip(shape)

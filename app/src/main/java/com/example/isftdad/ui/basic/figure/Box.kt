@@ -1,4 +1,4 @@
-package com.example.isftdad.ui.figure
+package com.example.isftdad.ui.basic.figure
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -8,7 +8,6 @@ import androidx.compose.material.LocalContentColor
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.currentRecomposeScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
